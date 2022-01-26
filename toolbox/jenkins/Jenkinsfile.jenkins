@@ -1,12 +1,13 @@
-#! groovy
-
+#!groovy
+//  groovy Jenkinsfile
 properties([disableConcurrentBuilds()])
 
-pipeline {
-     agent{
+pipeline  {
+    
+    agent { 
         label 'master'
-    }
-    options {
+        }
+      options {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
         timestamps()
     }
@@ -14,6 +15,7 @@ pipeline {
         stage("Build docker image"){
             steps{
                 dir('.'){
+                    sh "pwd && ls -l"
                     sh "docker build -t macnaer/admin_panel ."
                 }
             }
