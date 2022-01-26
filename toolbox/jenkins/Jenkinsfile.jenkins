@@ -17,7 +17,7 @@ pipeline  {
                 echo 'Creating docker image ...'
                 dir('.'){
                     sh '''
-                    docker build -t macnaer/admin_panel
+                    docker build -t macnaer/admin_panel .
                     '''
                 }
             }
