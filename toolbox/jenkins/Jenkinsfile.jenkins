@@ -17,7 +17,7 @@ pipeline  {
                 echo 'Creating docker image ...'
                 dir('.'){
                     sh '''
-                    docker build -t macnaer/admin_panel .
+                    docker build -t itstepdockerlearn/admin_panel .
                     '''
                 }
             }
@@ -36,7 +36,7 @@ pipeline  {
             steps {
                 echo " ============== pushing image =================="
                 sh '''
-                docker push macnaer/admin_panel
+                docker push itstepdockerlearn/admin_panel
                 '''
             }
         }    
