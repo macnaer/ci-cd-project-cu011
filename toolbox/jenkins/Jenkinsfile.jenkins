@@ -7,35 +7,55 @@ pipeline  {
     agent { 
         label 'master'
         }
-      options {
-        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
     }
     stages {
-        stage("Build docker image"){
-            steps{
+        // stage("Removing old images") {
+        //     steps {
+        //         echo 'Removing images ...'
+        //         dir('.'){
+        //             sh "docker rmi maximus7022/chatterbox_node maximus7022/chatterbox_nginx chatterbox_node chatterbox_nginx"
+        //         }
+        //     }
+        // }
+        stage("Creating images") {
+            steps {
+                echo 'Creating docker image ...'
                 dir('.'){
-                    sh "pwd && ls -l"
-                    sh "docker build -t macnaer/admin_panel ."
+                    sh "docker build -t macnaer/admin_panel"
                 }
             }
         }
-        stage("Docker login"){
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credential', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-                    sh "docker login -u $USERNAME -p $PASSWORD "
-                }         
+        stage("docker login") {
+            steps {
+                echo " ============== docker login =================="
+                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credential', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                    docker login -u $USERNAME -p $PASSWORD
+                    '''
+                }
             }
         }
-        stage("Docker push"){
-            steps{
-                sh "docker push macnaer/admin_panel"
+        stage("docker admin_panel") {
+            steps {
+                echo " ============== pushing image =================="
+                sh '''
+                docker push macnaer/admin_panel
+                '''
             }
         }
-        stage("docker push"){
-            steps{
-                sh "docker stop macnaer/admin_panel"
-            }
-        }
+        
+        // stage("docker push nginx") {
+        //     steps {
+        //         echo " ============== pushing image =================="
+        //         sh '''
+        //         docker push maximus7022/chatterbox_nginx:latest
+        //         '''
+        //     }
+        // }
+        
     }
+
 }
