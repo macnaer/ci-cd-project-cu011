@@ -1,0 +1,37 @@
+#! groovy
+
+properties([disableConcurrentDuilds()])
+
+pipline {
+    agent {
+        label 'master'
+        }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+        timestamps()
+    }
+    stages {
+        stage("Build docker image"){
+            steps{
+                dir('.'){
+                    sh "docker build -t macnaer/admin_panel ."
+                }
+            }
+        }
+        stage("Docker login"){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credential', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                    sh "docker login -u $USERNAME -p $PASSWORD "
+                }         
+            }
+        }
+        stage("Docker push"){
+            "docker push macnaer/admin_panel"
+        }
+        stage("docker push"){
+            steps{
+                sh "docker stop macnaer/admin_panel"
+            }
+        }
+    }
+}
