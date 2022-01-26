@@ -32,7 +32,7 @@ pipeline  {
                 }
             }
         }
-        stage("docker admin_panel") {
+        stage("docker push") {
             steps {
                 echo " ============== pushing image =================="
                 sh '''
