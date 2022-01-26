@@ -12,19 +12,13 @@ pipeline  {
         timestamps()
     }
     stages {
-        // stage("Removing old images") {
-        //     steps {
-        //         echo 'Removing images ...'
-        //         dir('.'){
-        //             sh "docker rmi maximus7022/chatterbox_node maximus7022/chatterbox_nginx chatterbox_node chatterbox_nginx"
-        //         }
-        //     }
-        // }
         stage("Creating images") {
             steps {
                 echo 'Creating docker image ...'
                 dir('.'){
-                    sh "docker build -t macnaer/admin_panel"
+                    sh '''
+                    docker build -t macnaer/admin_panel
+                    '''
                 }
             }
         }
@@ -45,17 +39,6 @@ pipeline  {
                 docker push macnaer/admin_panel
                 '''
             }
-        }
-        
-        // stage("docker push nginx") {
-        //     steps {
-        //         echo " ============== pushing image =================="
-        //         sh '''
-        //         docker push maximus7022/chatterbox_nginx:latest
-        //         '''
-        //     }
-        // }
-        
+        }    
     }
-
 }
