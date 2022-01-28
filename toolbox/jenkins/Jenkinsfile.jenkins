@@ -79,5 +79,6 @@ pipeline  {
                 docker run -d --restart=always --name app-server -p 80:3000 diogensynonsy/admin_panel
                 '''
             }
-        }    
+        }   
+    }        
 }
