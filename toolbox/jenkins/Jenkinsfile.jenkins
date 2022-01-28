@@ -12,6 +12,37 @@ pipeline  {
         timestamps()
     }
     stages {
+        
+        stage("Stopping containers") {
+            steps {
+                echo 'Stopping docker containers ...'
+                dir('.'){
+                    sh '''
+                    docker stop $(docker ps -a -q)
+                   '''
+                }
+            }
+        }
+        stage("Removing containers") {
+            steps {
+                echo 'Removing docker containers ...'
+                dir('.'){
+                    sh '''
+                    docker rm $(docker ps -a -q)
+                   '''
+                }
+            }
+        }
+        stage("Removing images") {
+            steps {
+                echo 'Removing docker images ...'
+                dir('.'){
+                    sh '''
+                    docker rmi $(docker images)
+                   '''
+                }
+            }
+        }
         stage("Creating images") {
             steps {
                 echo 'Creating docker image ...'
@@ -39,6 +70,14 @@ pipeline  {
                 docker push diogensynonsy/admin_panel
                 '''
             }
+        } 
+
+        stage("docker run") {
+            steps {
+                echo " ============== running container =================="
+                sh '''
+                docker run -d --restart=always --name app-server -p 80:3000 diogensynonsy/admin_panel
+                '''
+            }
         }    
-    }
 }
