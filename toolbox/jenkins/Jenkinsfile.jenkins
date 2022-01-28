@@ -18,7 +18,7 @@ pipeline  {
                 echo 'Stopping docker containers ...'
                 dir('.'){
                     sh '''
-                    docker stop $(docker ps -a -q)
+                    docker stop -f $(docker ps -a -q)
                    '''
                 }
             }
@@ -28,7 +28,7 @@ pipeline  {
                 echo 'Removing docker containers ...'
                 dir('.'){
                     sh '''
-                    docker rm $(docker ps -a -q)
+                    docker rm -f $(docker ps -a -q)
                    '''
                 }
             }
